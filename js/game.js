@@ -1,11 +1,14 @@
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext("2d");
 
-const ground = document.createElement(`IMG`);
-ground.src = "/ground.png";
+const ground = new Image();
+ground.src = "/img/ground.png";
 
-const foodImg = document.createElement(`IMG`);
-foodImg.src = "/food.png";
+
+
+const foodImg = new Image();
+foodImg.src = "/img/food.png";
+
 
 let box = 48;
 
@@ -24,7 +27,7 @@ snake[0] = {
 let width = canvas.width;
 let height = canvas.height;
 
-const blockSize = 30;
+const blockSize = 10;
 let widthInBlocks = width / blockSize;
 let heightInBlocks = height / blockSize;
 
@@ -40,16 +43,17 @@ function direction(e) {
 }
 function eatTail(head, arr) {
     for (let i = 0; i < arr.length; i++){
-        if (head.x == arr[i].x && head.y == arr[i].y) clearInterval(game),alert("Ваш счёт: " + score);
+        if (head.x == arr[i].x && head.y == arr[i].y)
+            clearInterval(game), alert("Ваш счёт: " + score), location.reload(true);
     }
 }
-let drawBorder = function () {
+let drawBorder = () => {
     ctx.fillStyle = "Black";
     ctx.fillRect(0, 0, width, blockSize);
     ctx.fillRect(0, height - blockSize, width, blockSize);
     ctx.fillRect(0, 0, blockSize, height);
     ctx.fillRect(width - blockSize, 0, blockSize, height);
-    };
+};
     
 
 function drawGame() {
@@ -79,8 +83,9 @@ function drawGame() {
     } else {
         snake.pop();
     }
-    if (snakeX < 0 || snakeX > box * 24 || snakeY < 0 || snakeY > box * 16)
-        clearInterval(game), alert("Ваш счёт: " + score);
+    if (snakeX < 0 || snakeX > box * 24 || snakeY < 0 || snakeY > box * 13)
+        clearInterval(game), alert("Ваш счёт: " + score), location.reload(true);
+        
 
         
 
@@ -100,8 +105,8 @@ function drawGame() {
     eatTail(newHead, snake);
     snake.unshift(newHead);
 }
-drawGame
+
 let game = setInterval(function () {
     drawGame();
-    drawBorder();
+    drawBorder ();
 }, 150);
