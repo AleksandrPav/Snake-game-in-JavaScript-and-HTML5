@@ -12,8 +12,8 @@ let box = 48;
 let score = 0;
 
 let food = {
-    x: Math.floor((Math.random() * 24 + 3)) * box,
-    y: Math.floor((Math.random() * 12 + 3)) * box,
+    x: Math.floor((Math.random() * 23 + 1)) * box,
+    y: Math.floor((Math.random() * 11 + 1)) * box,
 };
 
 let snake = [];
@@ -21,6 +21,12 @@ snake[0] = {
     x: 12 * box,
     y: 6 * box
 };
+let width = canvas.width;
+let height = canvas.height;
+
+const blockSize = 30;
+let widthInBlocks = width / blockSize;
+let heightInBlocks = height / blockSize;
 
 document.addEventListener("keydown", direction);
 let d;
@@ -32,13 +38,25 @@ function direction(e) {
 	if (k == 37 && d != 1) d = 3; //Влево
 	if (k == 38 && d != 2) d = 4; //Вверх
 }
-// function eatTail(head, arr) {
-//     for (let i = 0; i < arr.length; i++){
-//         if (head.x == arr[i].x && head.y == arr[i].y) clearInterval(game);
-//     }
-// }
+function eatTail(head, arr) {
+    for (let i = 0; i < arr.length; i++){
+        if (head.x == arr[i].x && head.y == arr[i].y) clearInterval(game),alert("Ваш счёт: " + score);
+    }
+}
+let drawBorder = function () {
+    ctx.fillStyle = "Black";
+    ctx.fillRect(0, 0, width, blockSize);
+    ctx.fillRect(0, height - blockSize, width, blockSize);
+    ctx.fillRect(0, 0, blockSize, height);
+    ctx.fillRect(width - blockSize, 0, blockSize, height);
+    };
+    
 
 function drawGame() {
+    
+
+
+
     ctx.drawImage(ground, 0, 0);
     ctx.drawImage(foodImg, food.x, food.y);
     for (let i = 0; i < snake.length; i++) {
@@ -54,15 +72,16 @@ function drawGame() {
     if (snakeX === food.x && snakeY === food.y) {
         score++;
         food = {
-            x: Math.floor((Math.random() * 24 + 2)) * box,
-            y: Math.floor((Math.random() * 12 + 2)) * box,
+            x: Math.floor((Math.random() * 23 + 1)) * box,
+            y: Math.floor((Math.random() * 11 + 1)) * box,
         };
         
     } else {
         snake.pop();
     }
-    // if (snakeX < box || snakeX > box * 24 || snakeY < 2 * box || snakeY > box * 17)
-    //     clearInterval(game);
+    if (snakeX < 0 || snakeX > box * 24 || snakeY < 0 || snakeY > box * 16)
+        clearInterval(game), alert("Ваш счёт: " + score);
+
         
 
 
@@ -78,8 +97,11 @@ function drawGame() {
     };
 
 
-    // eatTail(newHead, snake);
+    eatTail(newHead, snake);
     snake.unshift(newHead);
 }
-
-let game = setInterval(drawGame, 150);
+drawGame
+let game = setInterval(function () {
+    drawGame();
+    drawBorder();
+}, 150);
